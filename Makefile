@@ -7,7 +7,7 @@ RM = rm -rf
 INCLUDE = includes
 
 SRCS = \
-	srcs/actions.c \
+	srcs/philo_routine.c \
 	srcs/check_death.c \
 	srcs/init_simulation.c \
 	srcs/parsing.c \

@@ -6,7 +6,7 @@
 /*   By: rmedeiro <rmedeiro@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:49:15 by rmedeiro          #+#    #+#             */
-/*   Updated: 2025/12/04 16:54:31 by rmedeiro         ###   ########.fr       */
+/*   Updated: 2025/12/05 14:56:13 by rmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,21 @@ void	show_usage_error(void)
 	ft_putstr_fd("====================================================\n", 2);
 	ft_putstr_fd("            Simulation aborted. Try again.\n", 2);
 	ft_putstr_fd("====================================================\n", 2);
+}
+
+int	validate_args(int ac, char **av, t_sim *sim)
+{
+	if (!validate_numbers(ac, av))
+		return (0);
+	sim->philo_count = ft_atoi(av[1]);
+	sim->tt_die = ft_atoi(av[2]);
+	sim->tt_eat = ft_atoi(av[3]);
+	sim->tt_sleep = ft_atoi(av[4]);
+	sim->eat_count = 0;
+	if (ac == 6)
+		sim->eat_count = ft_atoi(av[5]);
+	sim->someone_died = 0;
+	return (1);
 }
 
 int	main(int ac, char **av)
