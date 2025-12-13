@@ -6,7 +6,7 @@
 /*   By: rmedeiro <rmedeiro@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 15:48:25 by rmedeiro          #+#    #+#             */
-/*   Updated: 2025/12/11 15:13:45 by rmedeiro         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:23:31 by rmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,17 @@ static int	handle_eating(t_philo *philo)
 {
 	if (!print_status(philo, "is eating"))
 		return (0);
+	ft_usleep(philo->tt_eat, philo);
 	pthread_mutex_lock(&philo->last_meal);
 	philo->last_meal_time = current_time_ms();
 	pthread_mutex_unlock(&philo->last_meal);
-	ft_usleep(philo->tt_eat, philo);
 	pthread_mutex_lock(&philo->meal_count);
 	if (philo->table->eat_count != 0)
 		philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_count);
 	return (1);
 }
+
 
 static int	even_id_philo(t_philo *philo) // vai pegar no right e depois no left
 {
@@ -67,10 +68,9 @@ static void	*philo_loop(t_philo *philo)
 {
 	while (1)
 	{
-		if (!print_status(philo, "is thinking"))
-			return (NULL);
-		usleep(500);
-		if (philo->philo_id % 2 == 1)
+		if (philo->philo_id % 2 == 0)
+			usleep(100);
+		if (philo->philo_id % 2)
 		{
 			if (!odd_id_philo(philo))
 				return (NULL);
@@ -83,8 +83,9 @@ static void	*philo_loop(t_philo *philo)
 		if (!print_status(philo, "is sleeping"))
 			return (NULL);
 		ft_usleep(philo->tt_sleep, philo);
+		if (!print_status(philo, "is thinking"))
+			return (NULL);
 	}
-	return (NULL);
 }
 
 void	*philo_routine(void *data)
@@ -94,6 +95,14 @@ void	*philo_routine(void *data)
 	philo = (t_philo *)data;
 	while (current_time_ms() < philo->start_sim)
 		usleep(100);
+	if (philo->table->philo_count == 1)
+	{
+		pthread_mutex_lock(philo->l_fork);
+		print_status(philo, "has taken a fork");
+		pthread_mutex_unlock(philo->l_fork);
+		ft_usleep(philo->table->tt_die, philo);
+		return (NULL);
+	}
 	if (philo->philo_id % 2)
 		usleep(100);
 	return (philo_loop(philo));

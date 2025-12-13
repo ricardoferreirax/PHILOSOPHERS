@@ -6,7 +6,7 @@
 /*   By: rmedeiro <rmedeiro@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 15:44:44 by rmedeiro          #+#    #+#             */
-/*   Updated: 2025/12/11 15:50:32 by rmedeiro         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:24:40 by rmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_usleep(long long duration, t_philo *philo)
 			return ;
 		}
 		pthread_mutex_unlock(&philo->table->death_lock);
-		usleep(500);
+		usleep(100);
 	}
 }
 

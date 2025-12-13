@@ -6,7 +6,7 @@
 /*   By: rmedeiro <rmedeiro@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 12:49:15 by rmedeiro          #+#    #+#             */
-/*   Updated: 2025/12/11 15:34:32 by rmedeiro         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:23:07 by rmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int ac, char **av)
 {
 	t_sim	sim;
 
-	sim.start_sim = current_time_ms() + 500;
+	sim.start_sim = current_time_ms();
 	if (ac != 5 && ac != 6)
 		return (show_usage_error(), 1);
 	if (!validate_args(ac, av, &sim))

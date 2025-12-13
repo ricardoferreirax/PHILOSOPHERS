@@ -6,35 +6,40 @@
 /*   By: rmedeiro <rmedeiro@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 16:04:07 by rmedeiro          #+#    #+#             */
-/*   Updated: 2025/12/11 15:53:40 by rmedeiro         ###   ########.fr       */
+/*   Updated: 2025/12/13 16:24:13 by rmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-static int philo_has_died(t_sim *sim, int i)
+static int	philo_has_died(t_sim *sim, int i)
 {
-    long long current;
-	
-	current = current_time_ms();
-    pthread_mutex_lock(&sim->philos[i].last_meal);
-    if (current - sim->philos[i].last_meal_time >= sim->tt_die)
-    {
-        pthread_mutex_unlock(&sim->philos[i].last_meal);
-        pthread_mutex_lock(&sim->death_lock);
-        if (!sim->someone_died)
-        {
-            sim->someone_died = 1;
-            pthread_mutex_lock(&sim->print_lock);
-            printf("%lld %d died\n", current - sim->start_sim, 
+	long long	now;
+	long long	last_meal;
+
+	now = current_time_ms();
+	pthread_mutex_lock(&sim->philos[i].last_meal);
+	last_meal = sim->philos[i].last_meal_time;
+	pthread_mutex_unlock(&sim->philos[i].last_meal);
+	if (now - last_meal >= sim->tt_die)
+	{
+		pthread_mutex_lock(&sim->death_lock);
+		if (!sim->someone_died)
+		{
+			sim->someone_died = 1;
+			pthread_mutex_unlock(&sim->death_lock);
+
+			pthread_mutex_lock(&sim->print_lock);
+			printf("%lld %d died\n",
+				now - sim->start_sim,
 				sim->philos[i].philo_id);
-            pthread_mutex_unlock(&sim->print_lock);
-        }
-        pthread_mutex_unlock(&sim->death_lock);
-        return (0);
-    }
-    pthread_mutex_unlock(&sim->philos[i].last_meal);
-    return (1);
+			pthread_mutex_unlock(&sim->print_lock);
+		}
+		else
+			pthread_mutex_unlock(&sim->death_lock);
+		return (0);
+	}
+	return (1);
 }
 
 static int	check_death(t_sim *sim)
@@ -89,27 +94,18 @@ static int	check_meal_count(t_sim *sim)
 	return (0);
 }
 
-void *death_monitor(void *data)
+void	*death_monitor(void *data)
 {
-    t_sim *sim;
+	t_sim	*sim;
 
 	sim = (t_sim *)data;
-    while (1)
-    {
-        if (sim->eat_count != 0 && check_meal_count(sim))
-        {
-            pthread_mutex_lock(&sim->death_lock);
-            sim->someone_died = 1;
-            pthread_mutex_unlock(&sim->death_lock);
-            return NULL;
-        }
-        if (!check_death(sim))
-        {
-            pthread_mutex_lock(&sim->death_lock);
-            sim->someone_died = 1;
-            pthread_mutex_unlock(&sim->death_lock);
-            return NULL;
-        }
-        usleep(100);
-    }
+	while (1)
+	{
+		if (sim->eat_count != 0 && check_meal_count(sim))
+			return (NULL);
+		if (!check_death(sim))
+			return (NULL);
+		usleep(100);
+	}
 }
+
