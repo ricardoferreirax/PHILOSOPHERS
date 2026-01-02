@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rmedeiro <rmedeiro@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: rmedeiro <rmedeiro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 21:17:39 by rmedeiro          #+#    #+#             */
-/*   Updated: 2026/01/01 22:12:32 by rmedeiro         ###   ########.fr       */
+/*   Updated: 2026/01/02 12:26:31 by rmedeiro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../includes/philo.h"
+#include "../../includes/philo.h"
 
 static void	cleanup_simulation(t_sim *table, int code)
 {
